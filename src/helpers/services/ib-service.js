@@ -1,11 +1,8 @@
-import { isFSA } from "../entity-resolver";
 import { isBrowser } from "./is-browser";
 import { CAMPAIGN_PARAMS } from "./marketing-service";
 
 export const IB_PARAMS = {
   r_code: "r_code", // New parameter
-  node: "node", // New parameter
-  defaultNode: "NDE",
 };
 
 const getParamsFromUrl = () => {
@@ -22,7 +19,6 @@ export const getIBParamsAndSetToStorage = () => {
       // Save to localStorage first
       localStorage.setItem(IB_PARAMS.r_code, r_code);
       localStorage.removeItem(CAMPAIGN_PARAMS.campaign_code);
-      localStorage.removeItem(CAMPAIGN_PARAMS.node);
 
       // Remove r_code parameter from URL immediately and forcefully
       const cleanUrlFromParams = () => {
@@ -66,26 +62,17 @@ export const getIBParamsAndSetToStorage = () => {
       setTimeout(() => {
         cleanUrlFromParams();
       }, 100);
-    } else {
-      localStorage.setItem(IB_PARAMS.node, IB_PARAMS.defaultNode);
-      // Clear r_code if node is set
-      localStorage.removeItem(IB_PARAMS.r_code);
-      // Clear campaign_code if node is set
-      localStorage.removeItem(CAMPAIGN_PARAMS.campaign_code);
     }
   }
 };
 
 export const setIBparamsToLink = () => {
-  if (isBrowser() && isFSA) {
+  if (isBrowser()) {
     const r_code = localStorage.getItem(IB_PARAMS.r_code);
-    const node = localStorage.getItem(IB_PARAMS.node);
 
-    /// Check conditions and construct the query string accordingly
+    // Check conditions and construct the query string accordingly
     if (r_code) {
       return `?${IB_PARAMS.r_code}=${r_code}`; // Only r_code
-    } else if (node) {
-      return `?${IB_PARAMS.node}=${node}`; // Only node
     }
   }
 

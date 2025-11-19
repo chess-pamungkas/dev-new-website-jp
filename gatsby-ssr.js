@@ -435,7 +435,7 @@ export const onRenderBody = ({
       name="description"
       content="Forex, cfd trading on stocks, indices, oil and gold with the most advanced trading platforms. Trade with OQtima™, a licensed forex broker."
     />,
-    <meta key="default-robots" name="robots" content="noindex, nofollow" />,
+    <meta key="default-robots" name="robots" content="noindex" />,
     <script
       key="com-tag"
       dangerouslySetInnerHTML={{
