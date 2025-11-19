@@ -420,6 +420,12 @@ export const onRenderBody = ({
       type="font/ttf"
       crossOrigin="anonymous"
     />,
+    <script
+      key="disable-ga"
+      dangerouslySetInnerHTML={{
+        __html: `window['ga-disable-${process.env.GATSBY_GA}'] = true;`,
+      }}
+    />,
     // Default title and description for Google bot fast mode
     <title key="default-title">
       Forex & CFD Trading on Stocks, Indices, Oil, Gold by OQtima™
@@ -429,30 +435,13 @@ export const onRenderBody = ({
       name="description"
       content="Forex, cfd trading on stocks, indices, oil and gold with the most advanced trading platforms. Trade with OQtima™, a licensed forex broker."
     />,
-    <meta key="og-type" property="og:type" content="website" />,
-    <meta
-      key="og-title"
-      property="og:title"
-      content="Forex & CFD Trading on Stocks, Indices, Oil, Gold by OQtima™"
+    <meta key="default-robots" name="robots" content="noindex, nofollow" />,
+    <script
+      key="com-tag"
+      dangerouslySetInnerHTML={{
+        __html: `(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"295009806", enableAutoSpaTracking: true};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq")`,
+      }}
     />,
-    <meta
-      key="og-desc"
-      property="og:description"
-      content="Forex, cfd trading on stocks, indices, oil and gold with the most advanced trading platforms. Trade with OQtima™, a licensed forex broker."
-    />,
-    <meta key="og-img" property="og:image" content="/preview.jpeg" />,
-    <meta key="tw-card" name="twitter:card" content="summary_large_image" />,
-    <meta
-      key="tw-title"
-      name="twitter:title"
-      content="Forex & CFD Trading on Stocks, Indices, Oil, Gold by OQtima™"
-    />,
-    <meta
-      key="tw-desc"
-      name="twitter:description"
-      content="Forex, cfd trading on stocks, indices, oil and gold with the most advanced trading platforms. Trade with OQtima™, a licensed forex broker."
-    />,
-    <meta key="tw-img" name="twitter:image" content="/preview.jpeg" />,
   ]);
 };
 
@@ -465,6 +454,12 @@ export const onPreRenderHTML = ({
   pathname,
 }) => {
   const headComponents = getHeadComponents();
+
+  // Sort head components to ensure "disable-ga" comes first
+  const orderedComponents = headComponents.sort((item) =>
+    item.key === "disable-ga" ? -1 : 1
+  );
+
   const earlyHints = [];
 
   // Preconnect hints - MUST be at the very beginning of head for optimal performance
@@ -667,7 +662,7 @@ export const onPreRenderHTML = ({
   // CRITICAL: Always replace head components with preconnect links at the beginning
   // Preconnect links MUST be at the very start of <head> to be effective
   // This ensures they're discovered early and connections are established before resources are requested
-  replaceHeadComponents([...earlyHints, ...headComponents]);
+  replaceHeadComponents([...earlyHints, ...orderedComponents]);
 };
 
 export const wrapPageElement = ({ element }) => {

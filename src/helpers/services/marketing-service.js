@@ -1,7 +1,5 @@
-import {
-  MARKETING_GET_PARAMS,
-  // SECT2_GROUP1_COUNT_OF_WORDS_DEFAULT,
-} from "../marketing.config";
+import { MARKETING_GET_PARAMS } from "../marketing.config";
+import { isFSA } from "../entity-resolver";
 import { isBrowser } from "./is-browser";
 import { IB_PARAMS } from "./ib-service";
 
@@ -44,16 +42,6 @@ export const getCampaignParamsAndSetToStorage = () => {
     // Check if campaign_code or UTM parameters exist in URL
     const hasCampaignCode = !!campaignCode;
     const hasUTMParams = !!(utmSource || utmMedium || utmCampaign);
-
-    console.log("getCampaignParamsAndSetToStorage called", {
-      hasCampaignCode,
-      hasUTMParams,
-      campaignCode,
-      utmSource,
-      utmMedium,
-      utmCampaign,
-      currentURL: window.location.href,
-    });
 
     if (hasCampaignCode || hasUTMParams) {
       // Store campaign_code if exists
@@ -159,7 +147,7 @@ export const getCampaignParamsAndSetToStorage = () => {
 };
 
 export const setCampaignParamsToLink = () => {
-  if (isBrowser()) {
+  if (isBrowser() && isFSA) {
     const campaign_code = localStorage.getItem(CAMPAIGN_PARAMS.campaign_code);
     const utmSource = localStorage.getItem("utm_source");
     const utmMedium = localStorage.getItem("utm_medium");
