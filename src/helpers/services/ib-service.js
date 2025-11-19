@@ -1,3 +1,4 @@
+import { isFSA } from "../entity-resolver";
 import { isBrowser } from "./is-browser";
 import { CAMPAIGN_PARAMS } from "./marketing-service";
 
